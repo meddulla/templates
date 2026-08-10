@@ -1,7 +1,16 @@
 import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-import { cloudflare } from "@cloudflare/vite-plugin";
 
+// No plugins.
+//
+// The upstream template uses @vitejs/plugin-react and @cloudflare/vite-plugin.
+// Neither is required to build this app, and both are expensive: the React
+// plugin exists for Fast Refresh and pulls in @babel/core, and the Cloudflare
+// plugin drives wrangler/miniflare as a local Node process. JSX itself needs
+// no plugin — the bundler transforms .tsx natively.
+//
+// See README for the full list of adaptations.
 export default defineConfig({
-	plugins: [react(), cloudflare()],
+	build: {
+		minify: true,
+	},
 });
