@@ -14,3 +14,14 @@ clean, the bundling is not what is wrong.
 
 Then hit **Preview** to bundle and open it in a new tab. The equivalent by hand
 is `vite dev worker/index.tsx`, which prints a `/__dev/<id>/` URL.
+
+## `wrangler.json`
+
+`main` names the Worker entry, and the IDE's **Preview** button reads it from
+here rather than guessing at a filename — so renaming the entry only needs
+changing in one place.
+
+There is deliberately no `$schema` key. It would point at
+`node_modules/wrangler/config-schema.json`, and `wrangler` is not a dependency
+of this template: adding it back for editor completion alone would undo most of
+the install-size reduction. Deploying is not wired up in the IDE.
