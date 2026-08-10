@@ -1,0 +1,29 @@
+hono-react-template/worker/index.tsx
+  s_92b3c9cfcc0868::t_b1f0a483f2b4ad 29
+hono-worker-template/src/index.ts
+  s_92b3c9cfcc0868::t_6d5c38ea1e400a 5
+hono-worker-template/test/app.test.ts
+  s_92b3c9cfcc0868::t_b2edac18d3c74c 8
+vite-react-template/scripts/gen-assets.mjs
+  s_92b3c9cfcc0868::t_23a4f285b15fe9 12-14
+vite-react-template/src/worker/index.ts
+  s_92b3c9cfcc0868::t_a5f91f397bc3d3 14-15
+vite-react-template/vite.config.ts
+  s_92b3c9cfcc0868::t_e82e4be31e3fc7 6
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "e1e20c859c3d4bc06a77b363c2605d31d892001b",
+  "prompts": {},
+  "sessions": {
+    "s_92b3c9cfcc0868": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_01c68d9f5ffe22O0AauvS7CtWO",
+        "model": "@cf/moonshotai/kimi-k2.7-code"
+      },
+      "human_author": "Sofia Cardita <scardita@cloudflare.com>"
+    }
+  }
+}
