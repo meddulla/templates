@@ -1,0 +1,21 @@
+hono-react-template/README.md
+  s_92b3c9cfcc0868::t_111007f4b575e1 17-27
+hono-worker-template/README.md
+  s_92b3c9cfcc0868::t_27dad84d16367f 16-26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "e2e2289242967d3a87bef7bdd74aa673ed99a52b",
+  "prompts": {},
+  "sessions": {
+    "s_92b3c9cfcc0868": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_01c68d9f5ffe22O0AauvS7CtWO",
+        "model": "@cf/moonshotai/kimi-k2.7-code"
+      },
+      "human_author": "Sofia Cardita <scardita@cloudflare.com>"
+    }
+  }
+}
