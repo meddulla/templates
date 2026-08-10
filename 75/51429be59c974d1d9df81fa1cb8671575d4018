@@ -1,0 +1,47 @@
+hono-react-template/.gitignore
+  s_92b3c9cfcc0868::t_8af5bd864315fa 1-3
+hono-react-template/README.md
+  s_92b3c9cfcc0868::t_1a11aa6d52f486 1-16
+hono-react-template/package.json
+  s_92b3c9cfcc0868::t_af3c7fbe060e52 1-21
+hono-react-template/src/App.tsx
+  s_92b3c9cfcc0868::t_2d467404b3c75f 1-14
+hono-react-template/src/client.tsx
+  s_92b3c9cfcc0868::t_2a4eec1aaaef49 1-12
+hono-react-template/tsconfig.client.json
+  s_92b3c9cfcc0868::t_c4cfa903172e57 1-15
+hono-react-template/tsconfig.json
+  s_92b3c9cfcc0868::t_8cd901c399cb7c 1-21
+hono-react-template/tsconfig.worker.json
+  s_92b3c9cfcc0868::t_4466567eb381fb 1-14
+hono-react-template/worker/index.tsx
+  s_92b3c9cfcc0868::t_49bd5fe0f3c51d 1-32
+hono-worker-template/.gitignore
+  s_92b3c9cfcc0868::t_5f102ed1f32b31 1-3
+hono-worker-template/README.md
+  s_92b3c9cfcc0868::t_822c3810a3d700 1-15
+hono-worker-template/package.json
+  s_92b3c9cfcc0868::t_3d5c1c91435182 1-17
+hono-worker-template/src/index.ts
+  s_92b3c9cfcc0868::t_1cac65ae290462 1-8
+hono-worker-template/test/app.test.ts
+  s_92b3c9cfcc0868::t_191d4cb766dd87 1-21
+hono-worker-template/tsconfig.json
+  s_92b3c9cfcc0868::t_cba192cc43df99 1-23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "7551429be59c974d1d9df81fa1cb8671575d4018",
+  "prompts": {},
+  "sessions": {
+    "s_92b3c9cfcc0868": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_01c68d9f5ffe22O0AauvS7CtWO",
+        "model": "@cf/moonshotai/kimi-k2.7-code"
+      },
+      "human_author": "Sofia Cardita <scardita@cloudflare.com>"
+    }
+  }
+}
