@@ -1,0 +1,12 @@
+{
+	"name": "hono-react-template",
+	"main": "./worker/index.tsx",
+	"compatibility_date": "2025-10-08",
+	"compatibility_flags": ["nodejs_compat"],
+	"observability": {
+		"enabled": true
+	},
+	"assets": {
+		"directory": "./dist/client"
+	}
+}
