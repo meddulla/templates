@@ -27,7 +27,7 @@
 	"private": true,
 	"scripts": {
 		"assets": "node scripts/gen-assets.mjs",
-		"build": "vite build src/worker/index.ts --outDir dist/server && vite build src/react-app/main.tsx --outDir dist/client",
+		"build": "vite build src/worker/index.ts --outDir dist/server && vite build index.html --outDir dist/client",
 		"cf-typegen": "wrangler types",
 		"check": "npm run typecheck && npm run build",
 		"deploy": "wrangler deploy",
