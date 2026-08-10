@@ -1,0 +1,21 @@
+{
+  "name": "hono-react-worker",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.worker.json && tsc -p tsconfig.client.json",
+    "build": "vite build worker/index.tsx --outDir dist/server && vite build src/client.tsx --outDir dist/client",
+    "build:run": "vite build worker/index.tsx --outDir dist/server --run"
+  },
+  "dependencies": {
+    "hono": "^4",
+    "react": "^18",
+    "react-dom": "^18"
+  },
+  "devDependencies": {
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "typescript": "^6.0.3",
+    "@cloudflare/workers-types": "^4.20260523.1"
+  }
+}
