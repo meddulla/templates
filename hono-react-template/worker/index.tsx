@@ -26,7 +26,7 @@ app.get("/", (c) => {
 });
 
 app.get("/api/hello", (c) =>
-  c.json({ greeting: "hi from hono inside busybox", at: Date.now() }),
+  c.json({ greeting: "hi from hono", at: Date.now() }),
 );
 
 export default app;

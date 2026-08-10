@@ -5,7 +5,7 @@ describe("hono worker", () => {
   it("serves text from /", async () => {
     const res = await app.fetch(new Request("http://localhost/"));
     expect(res.status).toBe(200);
-    expect(await res.text()).toBe("Hello from edgeblitz!");
+    expect(await res.text()).toBe("Hello from Hono!");
   });
 
   it("serves JSON from /api/hello", async () => {

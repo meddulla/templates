@@ -9,9 +9,9 @@
 //
 //   node scripts/gen-assets.mjs
 //
-// Needs Node, so it runs on a developer machine and not inside the in-browser
-// environment this template is adapted for. That is fine: the generated files
-// are committed, and nothing regenerates them at build time.
+// Needs Node, so it runs on a developer machine rather than as part of the
+// build. That is fine: the generated files are committed, and nothing
+// regenerates them at build time.
 
 import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";

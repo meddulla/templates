@@ -11,8 +11,8 @@ app.get("/api/", (c) => c.json({ name: "Cloudflare" }));
 // and `not_found_handling: single-page-application` handles client routes.
 //
 // It exists for environments that run the Worker with no static assets
-// attached — the in-browser preview this fork targets, where the client bundle
-// is served next to the Worker as /main.js. Keep it in sync with index.html.
+// attached, where the client bundle is served next to the Worker as /main.js.
+// Keep it in sync with index.html.
 const INDEX_HTML = `<!doctype html>
 <html lang="en">
 	<head>
