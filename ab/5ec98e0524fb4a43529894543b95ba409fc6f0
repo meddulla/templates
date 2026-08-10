@@ -1,0 +1,19 @@
+vite-react-template/package.json
+  s_92b3c9cfcc0868::t_4dc6372ca695c6 30
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "ab5ec98e0524fb4a43529894543b95ba409fc6f0",
+  "prompts": {},
+  "sessions": {
+    "s_92b3c9cfcc0868": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_01c68d9f5ffe22O0AauvS7CtWO",
+        "model": "@cf/moonshotai/kimi-k2.7-code"
+      },
+      "human_author": "Sofia Cardita <scardita@cloudflare.com>"
+    }
+  }
+}
