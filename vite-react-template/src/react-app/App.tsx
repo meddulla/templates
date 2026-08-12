@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { cloudflareLogo, honoLogo, reactLogo, viteLogo } from "./assets";
+import "./App.css";
 
 function App() {
 	const [count, setCount] = useState(0);
