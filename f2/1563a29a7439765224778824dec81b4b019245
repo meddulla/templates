@@ -1,0 +1,29 @@
+vite-react-template/scripts/gen-assets.mjs
+  s_ebe68b5b297279::t_ff9508d4cc7d05 1,3-5,7-11,51
+vite-react-template/src/react-app/App.tsx
+  s_196f2c8ef5d915::t_6556fb9682d419 5
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "f21563a29a7439765224778824dec81b4b019245",
+  "prompts": {},
+  "sessions": {
+    "s_196f2c8ef5d915": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_008c8993bffe1vDJt6ja8GBGNy",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Sofia Cardita <scardita@cloudflare.com>"
+    },
+    "s_ebe68b5b297279": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_00d02ea06ffe1q6FCMWB2JX3y3",
+        "model": "claude-opus-5"
+      },
+      "human_author": "Sofia Cardita <scardita@cloudflare.com>"
+    }
+  }
+}
