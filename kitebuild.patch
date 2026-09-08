@@ -1,0 +1,295 @@
+diff --git a/.github/actions/setup/action.yaml b/.github/actions/setup/action.yaml
+index b4c43b9..b922857 100644
+--- a/.github/actions/setup/action.yaml
++++ b/.github/actions/setup/action.yaml
+@@ -6,14 +6,6 @@ runs:
+   steps:
+     - uses: actions/checkout@v4
+ 
+-    - name: Cache turbo build setup
+-      uses: actions/cache@v4
+-      with:
+-        path: .turbo
+-        key: ${{ runner.os }}-turbo-${{ github.sha }}
+-        restore-keys: |
+-          ${{ runner.os }}-turbo-
+-
+     - name: Install pnpm
+       uses: pnpm/action-setup@v4
+ 
+diff --git a/.github/workflows/pull-request-deps.yaml b/.github/workflows/pull-request-deps.yaml
+index 66e1eea..3bafcf8 100644
+--- a/.github/workflows/pull-request-deps.yaml
++++ b/.github/workflows/pull-request-deps.yaml
+@@ -19,14 +19,6 @@ jobs:
+         with:
+           ref: ${{ github.head_ref }}
+ 
+-      - name: Cache turbo build setup
+-        uses: actions/cache@v4
+-        with:
+-          path: .turbo
+-          key: ${{ runner.os }}-turbo-${{ github.sha }}
+-          restore-keys: |
+-            ${{ runner.os }}-turbo-
+-
+       - name: Install pnpm
+         uses: pnpm/action-setup@v4
+ 
+diff --git a/CLAUDE.md b/CLAUDE.md
+index a5f135e..e44c57c 100644
+--- a/CLAUDE.md
++++ b/CLAUDE.md
+@@ -8,7 +8,7 @@ This is the Cloudflare Workers Templates repository containing a collection of s
+ 
+ - **Individual template directories** (each ending in `-template`)
+ - **Custom CLI tool** (`cli/`) for template management and validation
+-- **Turbo build system** for managing multiple projects
++- **Vite+ task runner** for managing multiple projects in Kitebuild
+ - **Playwright E2E tests** for template validation
+ 
+ ## Essential Commands
+@@ -94,11 +94,12 @@ Key CLI commands used internally:
+ 
+ ### Build System
+ 
+-Uses Turbo for coordinated builds across templates:
++The Kitebuild compatibility overlay uses `vp run` for coordinated builds across templates:
+ 
+-- Parallel building of multiple templates
+-- Caching for improved performance
+-- Coordinated TypeScript compilation
++- Independent templates run concurrently, with four jobs by default
++- Workspace dependencies finish before their dependants start
++- Build phases run before checks and Cloudflare type generation
++- Manifest scripts remain uncached because safe caching requires configured tasks with explicit inputs and outputs
+ 
+ ## Template Requirements and Best Practices
+ 
+@@ -177,7 +178,7 @@ Templates are validated through:
+ ## Important Files
+ 
+ - `templates.json` - Template registry with package hashes
+-- `turbo.json` - Build configuration
++- `package.json` - Vite+ workspace task commands in the Kitebuild overlay
+ - `playwright.config.ts` - E2E test configuration
+ - `pnpm-workspace.yaml` - Workspace configuration
+ 
+diff --git a/durable-chat-template/wrangler.json b/durable-chat-template/wrangler.json
+index 351fde1..e61a7b7 100644
+--- a/durable-chat-template/wrangler.json
++++ b/durable-chat-template/wrangler.json
+@@ -14,7 +14,7 @@
+ 		"not_found_handling": "single-page-application"
+ 	},
+ 	"build": {
+-		"command": "esbuild src/client/index.tsx --bundle --splitting --format=esm --platform=browser --outdir=public/dist"
++		"command": "vite build --no-config src/client/index.tsx --outDir public/dist"
+ 	},
+ 	"durable_objects": {
+ 		"bindings": [
+diff --git a/multiplayer-globe-template/wrangler.json b/multiplayer-globe-template/wrangler.json
+index c0881c4..c8a6b73 100644
+--- a/multiplayer-globe-template/wrangler.json
++++ b/multiplayer-globe-template/wrangler.json
+@@ -12,7 +12,7 @@
+ 		"directory": "public"
+ 	},
+ 	"build": {
+-		"command": "npx esbuild src/client/index.tsx --bundle --outdir=public/dist --splitting --sourcemap --format=esm"
++		"command": "vite build --no-config src/client/index.tsx --outDir public/dist --sourcemap"
+ 	},
+ 	"durable_objects": {
+ 		"bindings": [
+diff --git a/nodejs-http-server-template/package.json b/nodejs-http-server-template/package.json
+index d2f53ee..6da1957 100644
+--- a/nodejs-http-server-template/package.json
++++ b/nodejs-http-server-template/package.json
+@@ -25,7 +25,7 @@
+ 	},
+ 	"private": true,
+ 	"scripts": {
+-		"build": "wrangler build",
++		"build": "wrangler deploy --dry-run",
+ 		"cf-typegen": "wrangler types",
+ 		"check": "tsc && wrangler deploy --dry-run",
+ 		"deploy": "wrangler deploy",
+diff --git a/package.json b/package.json
+index 64a0bdd..75b39f2 100644
+--- a/package.json
++++ b/package.json
+@@ -9,7 +9,6 @@
+ 		"cli": "workspace:*",
+ 		"prettier": "3.7.4",
+ 		"syncpack": "13.0.4",
+-		"turbo": "2.6.1",
+ 		"vitest": "4.1.10"
+ 	},
+ 	"engines": {
+@@ -24,24 +23,24 @@
+ 		]
+ 	},
+ 	"scripts": {
+-		"check": "pnpm run check:deps && pnpm run check:templates && pnpm run check:lockfiles && pnpm run check:turbo && pnpm run check:prettier && git diff --exit-code",
++		"check": "pnpm run check:deps && pnpm run check:templates && pnpm run check:lockfiles && pnpm run check:vp && pnpm run check:prettier && git diff --exit-code",
+ 		"check:deps": "syncpack lint",
+ 		"check:lockfiles": "templates lint-npm-lockfiles .",
+ 		"check:prettier": "prettier . --check",
+ 		"check:templates": "templates lint .",
+-		"check:turbo": "turbo run check cf-typegen --force",
+-		"deploy": "turbo run deploy",
++		"check:vp": "vp run --filter '*' build && vp run --filter '*' check && vp run --filter '*' cf-typegen",
++		"deploy": "vp run --filter '*' deploy",
+ 		"deploy-live-demos": "templates deploy-live-demos .",
+-		"fix": "pnpm run fix:templates && pnpm run fix:lockfiles && pnpm run fix:turbo && pnpm run fix:prettier",
++		"fix": "pnpm run fix:templates && pnpm run fix:lockfiles && pnpm run fix:vp && pnpm run fix:prettier",
+ 		"fix:deps": "syncpack format && syncpack fix-mismatches",
+ 		"fix:lockfiles": "templates generate-npm-lockfiles .",
+ 		"fix:prettier": "prettier . --write",
+ 		"fix:templates": "templates lint . --fix",
+-		"fix:turbo": "turbo run cf-typegen --force",
++		"fix:vp": "vp run --filter '*' build && vp run --filter '*' cf-typegen",
+ 		"info:deps": "templates deps-info",
+-		"postinstall": "turbo run build && templates setup-hooks",
++		"postinstall": "vp run --filter '*' build && templates setup-hooks",
+ 		"preview": "templates preview",
+-		"test": "turbo run test -- --passWithNoTests",
++		"test": "vp run --filter '*' test -- --passWithNoTests",
+ 		"test:cli": "vitest",
+ 		"test:e2e": "playwright test",
+ 		"test:e2e:codegen": "playwright codegen",
+diff --git a/pnpm-lock.yaml b/pnpm-lock.yaml
+index bd4919a..930561a 100644
+--- a/pnpm-lock.yaml
++++ b/pnpm-lock.yaml
+@@ -27,9 +27,6 @@ importers:
+       syncpack:
+         specifier: 13.0.4
+         version: 13.0.4(typescript@5.9.3)
+-      turbo:
+-        specifier: 2.6.1
+-        version: 2.6.1
+       vitest:
+         specifier: 4.1.10
+         version: 4.1.10(@opentelemetry/api@1.9.0)(@types/node@24.10.1)(vite@7.3.0(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.30.2)(terser@5.16.9)(tsx@4.21.0)(yaml@2.9.0))
+diff --git a/react-postgres-fullstack-template/index.html b/react-postgres-fullstack-template/index.html
+index 843343f..caff506 100644
+--- a/react-postgres-fullstack-template/index.html
++++ b/react-postgres-fullstack-template/index.html
+@@ -4,6 +4,12 @@
+ 		<meta charset="UTF-8" />
+ 		<link rel="icon" type="image/svg+xml" href="/vite.svg" />
+ 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
++		<link rel="preconnect" href="https://fonts.googleapis.com" />
++		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
++		<link
++			href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;family=Noto+Sans:wght@300;400;500;600&amp;family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;family=Inter:wght@300;400;500;600&amp;display=swap"
++			rel="stylesheet"
++		/>
+ 		<title>React Postgres Fullstack Template</title>
+ 	</head>
+ 	<body>
+diff --git a/react-postgres-fullstack-template/package.json b/react-postgres-fullstack-template/package.json
+index 068f08f..0e1f370 100644
+--- a/react-postgres-fullstack-template/package.json
++++ b/react-postgres-fullstack-template/package.json
+@@ -53,7 +53,7 @@
+ 		"check": "vite build && wrangler deploy --dry-run",
+ 		"deploy": "wrangler deploy",
+ 		"dev": "vite",
+-		"lint": "eslint .",
++		"lint": "oxlint .",
+ 		"preview": "vite preview"
+ 	},
+ 	"type": "module"
+diff --git a/react-postgres-fullstack-template/src/index.css b/react-postgres-fullstack-template/src/index.css
+index f9c2606..e637662 100644
+--- a/react-postgres-fullstack-template/src/index.css
++++ b/react-postgres-fullstack-template/src/index.css
+@@ -1,6 +1,3 @@
+-@import url("https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Noto+Sans:wght@300;400;500;600&display=swap");
+-@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap");
+-
+ @import "tailwindcss";
+ 
+ @theme {
+diff --git a/remix-starter-template/package.json b/remix-starter-template/package.json
+index a3d7cb9..7117b50 100644
+--- a/remix-starter-template/package.json
++++ b/remix-starter-template/package.json
+@@ -50,7 +50,7 @@
+ 		"check": "tsc && remix vite:build && wrangler deploy --dry-run",
+ 		"deploy": "wrangler deploy",
+ 		"dev": "remix vite:dev",
+-		"lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
++		"lint": "oxlint .",
+ 		"preview": "npm run build && wrangler dev",
+ 		"start": "wrangler dev",
+ 		"typecheck": "tsc",
+diff --git a/to-do-list-kv-template/package.json b/to-do-list-kv-template/package.json
+index 4904c4f..ae8ae9b 100644
+--- a/to-do-list-kv-template/package.json
++++ b/to-do-list-kv-template/package.json
+@@ -54,7 +54,7 @@
+ 		"check": "tsc && remix vite:build && wrangler deploy --dry-run",
+ 		"deploy": "wrangler deploy",
+ 		"dev": "remix vite:dev",
+-		"lint": "eslint --ignore-pattern .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
++		"lint": "oxlint .",
+ 		"preview": "npm run build && wrangler dev",
+ 		"start": "wrangler dev",
+ 		"test": "vitest",
+diff --git a/turbo.json b/turbo.json
+deleted file mode 100644
+index e1d8794..0000000
+--- a/turbo.json
++++ /dev/null
+@@ -1,26 +0,0 @@
+-{
+-	"$schema": "https://turbo.build/schema.json",
+-	"tasks": {
+-		"build": {
+-			"outputs": [
+-				".astro/**",
+-				".next/**",
+-				".open-next/**",
+-				".react-router/**",
+-				".wrangler/**",
+-				"build/**",
+-				"dist/**"
+-			]
+-		},
+-		"check": {
+-			"dependsOn": ["build"]
+-		},
+-		"cf-typegen": {
+-			"dependsOn": ["build"]
+-		},
+-		"deploy": {
+-			"env": ["CLOUDFLARE_ACCOUNT_ID", "CLOUDFLARE_API_TOKEN"]
+-		},
+-		"test": {}
+-	}
+-}
+diff --git a/x402-proxy-template/package.json b/x402-proxy-template/package.json
+index 869f649..48a7496 100644
+--- a/x402-proxy-template/package.json
++++ b/x402-proxy-template/package.json
+@@ -38,12 +38,12 @@
+ 	"private": true,
+ 	"scripts": {
+ 		"cf-typegen": "wrangler types --env-interface CloudflareBindings",
+-		"deploy": "wrangler deploy --minify",
++		"deploy": "wrangler deploy",
+ 		"dev": "wrangler dev",
+-		"format": "prettier --write .",
+-		"format:check": "prettier --check .",
+-		"lint": "npm run typecheck && npm run format:check && eslint .",
+-		"lint:fix": "prettier --write . && eslint . --fix",
++		"format": "oxfmt --write .",
++		"format:check": "oxfmt --check .",
++		"lint": "npm run typecheck && npm run format:check && oxlint .",
++		"lint:fix": "oxfmt --write . && oxlint . --fix",
+ 		"test": "tsx --test test/index.test.ts",
+ 		"test:client": "tsx test-client.ts",
+ 		"typecheck": "tsc --noEmit"
