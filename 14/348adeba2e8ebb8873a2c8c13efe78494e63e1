@@ -1,0 +1,19 @@
+kitebuild.patch
+  s_a0657dd252194f::t_31ad0055666fc5 1-295
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "14348adeba2e8ebb8873a2c8c13efe78494e63e1",
+  "prompts": {},
+  "sessions": {
+    "s_a0657dd252194f": {
+      "agent_id": {
+        "tool": "opencode",
+        "id": "ses_f82061b8affeSykVuah0Fqxft3",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "Sofia Cardita <scardita@cloudflare.com>"
+    }
+  }
+}
